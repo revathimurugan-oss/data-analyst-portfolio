@@ -13,6 +13,7 @@ import { projectsData } from '../data/projectsData';
 import { Project } from '../types';
 import { ProjectModal } from './ProjectModal';
 import { downloadFile } from '../utils/helpers';
+import { trackEvent } from '../utils/adminService';
 
 export const Projects: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -144,7 +145,10 @@ export const Projects: React.FC = () => {
                 {/* Card Bottom Actions */}
                 <div className="p-4 bg-sky-50/40 border-t border-sky-100 flex items-center justify-between gap-3">
                   <button
-                    onClick={() => setActiveProject(project)}
+                    onClick={() => {
+                      setActiveProject(project);
+                      trackEvent('project_view');
+                    }}
                     className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-sky-600 hover:text-sky-700 transition-colors group-hover:translate-x-1 duration-200"
                   >
                     <span>Explore Full Case Study</span>

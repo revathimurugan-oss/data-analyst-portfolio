@@ -4,15 +4,17 @@ import {
   Menu, 
   X, 
   Download, 
-  ChevronRight
+  ChevronRight,
+  ShieldCheck
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
 interface NavbarProps {
   onOpenResumeModal: () => void;
+  onOpenAdminModal?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal, onOpenAdminModal }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
@@ -106,6 +108,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal }) => {
 
           {/* Desktop Right Actions */}
           <div className="hidden sm:flex items-center gap-2.5">
+            {onOpenAdminModal && (
+              <button
+                onClick={onOpenAdminModal}
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs md:text-sm font-semibold rounded-xl text-slate-600 hover:text-sky-700 bg-white hover:bg-sky-50 transition-colors border border-sky-200/80 shadow-xs"
+                title="Admin Control Center (PIN: 2026)"
+              >
+                <ShieldCheck className="w-4 h-4 text-sky-600" />
+                <span>Admin</span>
+              </button>
+            )}
+
             <button
               onClick={onOpenResumeModal}
               className="inline-flex items-center gap-2 px-3.5 py-2 text-xs md:text-sm font-semibold rounded-xl text-sky-700 bg-sky-50 hover:bg-sky-100 transition-colors border border-sky-200 shadow-xs"
@@ -183,6 +196,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal }) => {
               <Download className="w-4 h-4" />
               <span>Download Resume PDF</span>
             </a>
+
+            {onOpenAdminModal && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAdminModal();
+                }}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-sky-200 shadow-2xs"
+              >
+                <ShieldCheck className="w-4 h-4 text-sky-600" />
+                <span>Admin Operations Portal</span>
+              </button>
+            )}
           </div>
         </div>
       )}

@@ -1,16 +1,18 @@
 import React from 'react';
 import { 
   ArrowUp, 
-  FileText
+  FileText,
+  ShieldCheck
 } from 'lucide-react';
 import { LinkedinIcon, GithubIcon } from './Icons';
 import { personalInfo } from '../data/portfolioData';
 
 interface FooterProps {
   onOpenResumeModal: () => void;
+  onOpenAdminModal?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenResumeModal }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenResumeModal, onOpenAdminModal }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -128,6 +130,17 @@ export const Footer: React.FC<FooterProps> = ({ onOpenResumeModal }) => {
           </div>
 
           <div className="flex items-center gap-4">
+            {onOpenAdminModal && (
+              <button
+                onClick={onOpenAdminModal}
+                className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-sky-700 transition-colors"
+                title="Admin Control Center (PIN: 2026)"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-sky-600" />
+                <span>Admin Portal</span>
+              </button>
+            )}
+
             <button
               onClick={scrollToTop}
               className="flex items-center gap-1.5 text-xs font-semibold text-sky-700 hover:text-sky-800 transition-colors"

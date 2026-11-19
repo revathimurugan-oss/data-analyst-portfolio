@@ -1,3 +1,5 @@
+const inquiries = [];
+
 export default async function handler(req, res) {
     // Enable CORS for testing
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -18,7 +20,9 @@ export default async function handler(req, res) {
             status: 'online',
             service: 'Revathi Murugan Portfolio Backend API',
             version: '1.0.0',
-            endpoints: ['/api/contacts']
+            endpoints: ['/api/contacts'],
+            inquiriesCount: inquiries.length,
+            inquiries: inquiries
         });
     }
 
@@ -28,19 +32,26 @@ export default async function handler(req, res) {
 
     const { name, email, company, role, message } = req.body || {};
 
-    // Log recruiter inquiry
-    console.log('New Recruiter Inquiry:', {
-        name,
-        email,
-        company,
-        role,
-        message,
+    const record = {
+        id: 'lead-' + Date.now(),
+        name: name || 'Anonymous',
+        email: email || '',
+        company: company || 'Not specified',
+        role: role || 'Junior Data Analyst',
+        message: message || '',
+        status: 'new',
         receivedAt: new Date().toISOString()
-    });
+    };
+
+    inquiries.unshift(record);
+
+    // Log recruiter inquiry
+    console.log('New Recruiter Inquiry:', record);
 
     return res.status(200).json({
         success: true,
         message: 'Inquiry received successfully! Thank you for reaching out.',
-        timestamp: new Date().toISOString()
+        leadId: record.id,
+        timestamp: record.receivedAt
     });
 }

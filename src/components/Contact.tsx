@@ -13,6 +13,7 @@ import {
 import { LinkedinIcon, GithubIcon } from './Icons';
 import { personalInfo } from '../data/portfolioData';
 import { copyToClipboard } from '../utils/helpers';
+import { addInquiry } from '../utils/adminService';
 
 export const Contact: React.FC = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -46,6 +47,13 @@ export const Contact: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Save locally for admin dashboard
+    try {
+      addInquiry(formData);
+    } catch (e) {
+      console.warn('Failed to record inquiry locally', e);
+    }
+
     // Asynchronously log inquiry to serverless backend
     try {
       fetch('/api/contacts', {

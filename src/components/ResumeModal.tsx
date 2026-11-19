@@ -6,6 +6,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import { trackEvent } from '../utils/adminService';
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -42,6 +43,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
             <a
               href="/Revathi_Murugan_Resume.pdf"
               download="Revathi_Murugan_Resume.pdf"
+              onClick={() => trackEvent('resume_download')}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold bg-sky-500 text-white hover:bg-sky-600 shadow-sm shadow-sky-400/30 transition-colors"
             >
               <Download className="w-4 h-4" />

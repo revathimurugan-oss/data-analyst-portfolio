@@ -8,6 +8,9 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// In-memory store for recruiter inquiries
+const inquiries = [];
+
 // Body parser
 app.use(express.json());
 
@@ -21,6 +24,8 @@ app.get('/api/contacts', (req, res) => {
     service: 'Revathi Murugan Portfolio Backend API',
     version: '1.0.0',
     endpoints: ['/api/contacts'],
+    inquiriesCount: inquiries.length,
+    inquiries: inquiries,
     timestamp: new Date().toISOString()
   });
 });
@@ -28,19 +33,26 @@ app.get('/api/contacts', (req, res) => {
 app.post('/api/contacts', (req, res) => {
   const { name, email, company, role, message } = req.body || {};
 
-  console.log('New Recruiter Inquiry:', {
-    name,
-    email,
-    company,
-    role,
-    message,
+  const record = {
+    id: 'lead-' + Date.now(),
+    name: name || 'Anonymous',
+    email: email || '',
+    company: company || 'Not specified',
+    role: role || 'Junior Data Analyst',
+    message: message || '',
+    status: 'new',
     receivedAt: new Date().toISOString()
-  });
+  };
+
+  inquiries.unshift(record);
+
+  console.log('New Recruiter Inquiry Stored:', record);
 
   res.status(200).json({
     success: true,
     message: 'Inquiry received successfully! Thank you for reaching out.',
-    timestamp: new Date().toISOString()
+    leadId: record.id,
+    timestamp: record.receivedAt
   });
 });
 
