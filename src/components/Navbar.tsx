@@ -7,7 +7,7 @@ import {
   ChevronRight,
   ShieldCheck
 } from 'lucide-react';
-import { personalInfo } from '../data/portfolioData';
+import { usePortfolio } from '../context/PortfolioContext';
 
 interface NavbarProps {
   onOpenResumeModal: () => void;
@@ -15,6 +15,7 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal, onOpenAdminModal }) => {
+  const { personalInfo } = usePortfolio();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');

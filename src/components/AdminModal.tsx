@@ -35,6 +35,7 @@ import {
   TrendingUp,
   UserCheck
 } from 'lucide-react';
+import { AdminCrudStudio } from './AdminCrudStudio';
 import {
   AreaChart,
   Area,
@@ -725,7 +726,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose }) => {
                   }`}
                 >
                   <Sliders className="w-4 h-4" />
-                  <span>Portfolio CMS & Profile</span>
+                  <span>Portfolio Sections & Content (CRUD)</span>
                 </button>
 
                 <button
@@ -1219,151 +1220,12 @@ export const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose }) => {
               )}
 
               {/* --------------------------------------------------------
-                  TAB 3: PORTFOLIO CMS & PROFILE CONTROLS
+                  TAB 3: PORTFOLIO SECTIONS & CONTENT CRUD STUDIO
                   -------------------------------------------------------- */}
               {activeTab === 'cms' && (
-                <form onSubmit={handleSaveCmsSettings} className="space-y-5 bg-white p-5 rounded-2xl border border-sky-100 shadow-xs">
-                  <div className="flex items-center justify-between pb-3 border-b border-sky-100">
-                    <div>
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-navy-950">
-                        Live Candidate Profile & Availability CMS
-                      </h4>
-                      <p className="text-[11px] text-slate-500">
-                        Changes modify live display values and state.
-                      </p>
-                    </div>
-
-                    {cmsSavedToast && (
-                      <span className="text-xs font-bold text-emerald-600 flex items-center gap-1.5 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200">
-                        <Check className="w-4 h-4" />
-                        <span>Changes Applied Successfully!</span>
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">Candidate Full Name</label>
-                      <input
-                        type="text"
-                        value={cmsSettings.name}
-                        onChange={(e) => setCmsSettings({ ...cmsSettings, name: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl bg-sky-50/40 border border-sky-200 text-navy-950 font-medium"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">Professional Headline / Role</label>
-                      <input
-                        type="text"
-                        value={cmsSettings.role}
-                        onChange={(e) => setCmsSettings({ ...cmsSettings, role: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl bg-sky-50/40 border border-sky-200 text-navy-950 font-medium"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">Direct Email Address</label>
-                      <input
-                        type="email"
-                        value={cmsSettings.email}
-                        onChange={(e) => setCmsSettings({ ...cmsSettings, email: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl bg-sky-50/40 border border-sky-200 text-navy-950 font-medium"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">Direct Phone Number</label>
-                      <input
-                        type="text"
-                        value={cmsSettings.phone}
-                        onChange={(e) => setCmsSettings({ ...cmsSettings, phone: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl bg-sky-50/40 border border-sky-200 text-navy-950 font-medium"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">Current Availability Status</label>
-                      <input
-                        type="text"
-                        value={cmsSettings.availabilityStatus}
-                        onChange={(e) => setCmsSettings({ ...cmsSettings, availabilityStatus: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl bg-sky-50/40 border border-sky-200 text-navy-950 font-medium"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">Notice Period</label>
-                      <input
-                        type="text"
-                        value={cmsSettings.noticePeriod}
-                        onChange={(e) => setCmsSettings({ ...cmsSettings, noticePeriod: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl bg-sky-50/40 border border-sky-200 text-navy-950 font-medium"
-                      />
-                    </div>
-
-                    <div className="sm:col-span-2">
-                      <label className="block font-bold text-slate-700 mb-1">Preferred Target Locations</label>
-                      <input
-                        type="text"
-                        value={cmsSettings.targetLocations}
-                        onChange={(e) => setCmsSettings({ ...cmsSettings, targetLocations: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl bg-sky-50/40 border border-sky-200 text-navy-950 font-medium"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">LinkedIn Profile URL</label>
-                      <input
-                        type="url"
-                        value={cmsSettings.linkedin}
-                        onChange={(e) => setCmsSettings({ ...cmsSettings, linkedin: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl bg-sky-50/40 border border-sky-200 text-navy-950 font-medium"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">GitHub Profile URL</label>
-                      <input
-                        type="url"
-                        value={cmsSettings.github}
-                        onChange={(e) => setCmsSettings({ ...cmsSettings, github: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl bg-sky-50/40 border border-sky-200 text-navy-950 font-medium"
-                      />
-                    </div>
-
-                    <div className="sm:col-span-2 flex items-center gap-5 pt-1">
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={cmsSettings.openToRelocate}
-                          onChange={(e) => setCmsSettings({ ...cmsSettings, openToRelocate: e.target.checked })}
-                          className="w-4 h-4 text-sky-600 rounded border-sky-300"
-                        />
-                        <span className="font-semibold text-slate-700">Open to Relocation (Bangalore / Chennai / Hyderabad)</span>
-                      </label>
-
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={cmsSettings.highlightBiCockpit}
-                          onChange={(e) => setCmsSettings({ ...cmsSettings, highlightBiCockpit: e.target.checked })}
-                          className="w-4 h-4 text-sky-600 rounded border-sky-300"
-                        />
-                        <span className="font-semibold text-slate-700">Highlight Live BI Cockpit</span>
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="pt-2">
-                    <button
-                      type="submit"
-                      className="px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs shadow-xs transition-colors"
-                    >
-                      Save & Apply CMS Updates
-                    </button>
-                  </div>
-                </form>
+                <div className="space-y-4">
+                  <AdminCrudStudio />
+                </div>
               )}
 
               {/* --------------------------------------------------------

@@ -11,11 +11,12 @@ import {
   Sparkles
 } from 'lucide-react';
 import { LinkedinIcon, GithubIcon } from './Icons';
-import { personalInfo } from '../data/portfolioData';
 import { copyToClipboard } from '../utils/helpers';
 import { addInquiry } from '../utils/adminService';
+import { usePortfolio } from '../context/PortfolioContext';
 
 export const Contact: React.FC = () => {
+  const { personalInfo } = usePortfolio();
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);

@@ -8,9 +8,10 @@ import {
   Sparkles,
   AlertCircle
 } from 'lucide-react';
-import { experienceList } from '../data/portfolioData';
+import { usePortfolio } from '../context/PortfolioContext';
 
 export const Experience: React.FC = () => {
+  const { experienceList } = usePortfolio();
   return (
     <section id="experience" className="py-24 bg-white border-b border-sky-100/80 relative overflow-hidden">
       

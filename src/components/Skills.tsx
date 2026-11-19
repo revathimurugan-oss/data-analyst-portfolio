@@ -16,9 +16,10 @@ import {
   Terminal, 
   ShieldCheck
 } from 'lucide-react';
-import { skillCategories } from '../data/portfolioData';
+import { usePortfolio } from '../context/PortfolioContext';
 
 export const Skills: React.FC = () => {
+  const { skillCategories } = usePortfolio();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 

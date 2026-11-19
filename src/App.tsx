@@ -12,10 +12,12 @@ import { Footer } from './components/Footer';
 import { ResumeModal } from './components/ResumeModal';
 import { AdminModal } from './components/AdminModal';
 import { trackEvent } from './utils/adminService';
+import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
 
-export const App: React.FC = () => {
+const PortfolioAppContent: React.FC = () => {
   const [resumeModalOpen, setResumeModalOpen] = useState(false);
   const [adminModalOpen, setAdminModalOpen] = useState(false);
+  const { sectionVisibility } = usePortfolio();
 
   useEffect(() => {
     // Record page view telemetry
@@ -53,31 +55,33 @@ export const App: React.FC = () => {
         onOpenAdminModal={() => setAdminModalOpen(true)}
       />
 
-      {/* Main Content Sections */}
+      {/* Main Content Sections with Dynamic Visibility Controls */}
       <main className="flex-grow">
         {/* Hero Section */}
-        <Hero onOpenResumeModal={() => setResumeModalOpen(true)} />
+        {sectionVisibility.hero && (
+          <Hero onOpenResumeModal={() => setResumeModalOpen(true)} />
+        )}
 
         {/* About Section */}
-        <About />
+        {sectionVisibility.about && <About />}
 
         {/* Technical Skills Section */}
-        <Skills />
+        {sectionVisibility.skills && <Skills />}
 
         {/* Featured Projects Showcase */}
-        <Projects />
+        {sectionVisibility.projects && <Projects />}
 
         {/* Interactive Live BI Dashboard Section */}
-        <InteractiveDashboardSection />
+        {sectionVisibility.dashboards && <InteractiveDashboardSection />}
 
         {/* Education & Certifications */}
-        <EducationCertifications />
+        {sectionVisibility.education && <EducationCertifications />}
 
         {/* Professional Experience */}
-        <Experience />
+        {sectionVisibility.experience && <Experience />}
 
         {/* Contact Section */}
-        <Contact />
+        {sectionVisibility.contact && <Contact />}
       </main>
 
       {/* Footer */}
@@ -103,6 +107,14 @@ export const App: React.FC = () => {
         }}
       />
     </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <PortfolioProvider>
+      <PortfolioAppContent />
+    </PortfolioProvider>
   );
 };
 

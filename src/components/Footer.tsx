@@ -5,7 +5,7 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { LinkedinIcon, GithubIcon } from './Icons';
-import { personalInfo } from '../data/portfolioData';
+import { usePortfolio } from '../context/PortfolioContext';
 
 interface FooterProps {
   onOpenResumeModal: () => void;
@@ -13,6 +13,7 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onOpenResumeModal, onOpenAdminModal }) => {
+  const { personalInfo } = usePortfolio();
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

@@ -14,13 +14,14 @@ import {
   Code2
 } from 'lucide-react';
 import { LinkedinIcon, GithubIcon } from './Icons';
-import { personalInfo } from '../data/portfolioData';
+import { usePortfolio } from '../context/PortfolioContext';
 
 interface HeroProps {
   onOpenResumeModal: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal }) => {
+  const { personalInfo } = usePortfolio();
   return (
     <section 
       id="hero" 

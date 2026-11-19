@@ -9,21 +9,22 @@ import {
   PieChart,
   Code
 } from 'lucide-react';
-import { projectsData } from '../data/projectsData';
 import { Project } from '../types';
 import { ProjectModal } from './ProjectModal';
 import { downloadFile } from '../utils/helpers';
 import { trackEvent } from '../utils/adminService';
+import { usePortfolio } from '../context/PortfolioContext';
 
 export const Projects: React.FC = () => {
+  const { projects } = usePortfolio();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [activeProject, setActiveProject] = useState<Project | null>(null);
 
   const categories = ['All', 'Sales Analytics', 'Financial Analysis', 'Customer Analytics', 'Business Intelligence', 'Data Engineering & EDA'];
 
   const filteredProjects = selectedCategory === 'All' 
-    ? projectsData 
-    : projectsData.filter(p => p.category === selectedCategory);
+    ? projects 
+    : projects.filter(p => p.category === selectedCategory);
 
   const categoryIcons: Record<string, React.ReactNode> = {
     'Sales Analytics': <TrendingUp className="w-4 h-4 text-sky-500" />,

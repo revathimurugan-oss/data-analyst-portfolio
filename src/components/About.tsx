@@ -6,9 +6,10 @@ import {
   CheckCircle2, 
   Compass
 } from 'lucide-react';
-import { personalInfo } from '../data/portfolioData';
+import { usePortfolio } from '../context/PortfolioContext';
 
 export const About: React.FC = () => {
+  const { personalInfo } = usePortfolio();
   const analyticalWorkflow = [
     {
       step: "01",

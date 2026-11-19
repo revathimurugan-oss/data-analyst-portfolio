@@ -10,9 +10,10 @@ import {
   Building,
   Sparkles
 } from 'lucide-react';
-import { educationList, certificationsList } from '../data/portfolioData';
+import { usePortfolio } from '../context/PortfolioContext';
 
 export const EducationCertifications: React.FC = () => {
+  const { educationList, certificationsList } = usePortfolio();
   return (
     <section id="education" className="py-24 bg-sky-50/30 border-b border-sky-100/80 relative overflow-hidden">
       
