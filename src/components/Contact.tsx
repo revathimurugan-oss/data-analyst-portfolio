@@ -46,6 +46,19 @@ export const Contact: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Asynchronously log inquiry to serverless backend
+    try {
+      fetch('/api/contacts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      }).catch(err => {
+        console.warn('Backend logging endpoint reached fallback:', err);
+      });
+    } catch {
+      // Fallback gracefully
+    }
+
     // Construct mailto link with encoded subject and body
     const subject = encodeURIComponent(`Data Analyst Opportunity - ${formData.role} at ${formData.company || 'Our Company'}`);
     const body = encodeURIComponent(
