@@ -70,7 +70,7 @@ interface PortfolioContextType {
 
 const STORAGE_KEYS = {
   PERSONAL_INFO: 'revathi_crud_personal_info_v1',
-  PROJECTS: 'revathi_crud_projects_v1',
+  PROJECTS: 'revathi_crud_projects_v2',
   SKILLS: 'revathi_crud_skills_v1',
   EDUCATION: 'revathi_crud_education_v1',
   CERTIFICATIONS: 'revathi_crud_certifications_v1',
@@ -106,7 +106,12 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [projects, setProjects] = useState<Project[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEYS.PROJECTS);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.some((p: Project) => p.id === 'trendpulse-sentiment-intelligence')) {
+          return parsed;
+        }
+      }
     } catch (e) {
       console.error(e);
     }

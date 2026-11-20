@@ -516,9 +516,11 @@ export const AdminCrudStudio: React.FC = () => {
                         onChange={(e: any) => setProjectForm({ ...projectForm, category: e.target.value })}
                         className="w-full px-3 py-2 rounded-xl bg-sky-50/40 border border-sky-200 text-navy-950 font-medium"
                       >
+                        <option value="AI & NLP Analytics">AI & NLP Analytics</option>
+                        <option value="Customer Analytics">Customer Analytics</option>
+                        <option value="Machine Learning & Algorithms">Machine Learning & Algorithms</option>
                         <option value="Sales Analytics">Sales Analytics</option>
                         <option value="Financial Analysis">Financial Analysis</option>
-                        <option value="Customer Analytics">Customer Analytics</option>
                         <option value="Business Intelligence">Business Intelligence</option>
                         <option value="Data Engineering & EDA">Data Engineering & EDA</option>
                       </select>
@@ -530,9 +532,33 @@ export const AdminCrudStudio: React.FC = () => {
                         type="text"
                         value={projectForm.tools?.join(', ') || ''}
                         onChange={(e) => setProjectForm({ ...projectForm, tools: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
-                        placeholder="Power BI, SQL, Python, Excel"
+                        placeholder="Python, Scikit-Learn, SQL, Power BI"
                         className="w-full px-3 py-2 rounded-xl bg-sky-50/40 border border-sky-200 text-navy-950"
                       />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">GitHub Repository URL (Optional)</label>
+                      <input
+                        type="url"
+                        value={projectForm.githubUrl || ''}
+                        onChange={(e) => setProjectForm({ ...projectForm, githubUrl: e.target.value, isRealRepo: Boolean(e.target.value) })}
+                        placeholder="https://github.com/revathimurugan-oss/..."
+                        className="w-full px-3 py-2 rounded-xl bg-sky-50/40 border border-sky-200 text-navy-950"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 pt-6">
+                      <label className="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={projectForm.isRealRepo || false}
+                          onChange={(e) => setProjectForm({ ...projectForm, isRealRepo: e.target.checked })}
+                          className="w-4 h-4 text-sky-600 rounded border-sky-300 focus:ring-sky-500"
+                        />
+                        <span>Verified Real GitHub Repository</span>
+                      </label>
                     </div>
                   </div>
 

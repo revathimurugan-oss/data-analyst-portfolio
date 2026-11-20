@@ -10,8 +10,11 @@ import {
   Lightbulb, 
   AlertCircle, 
   CheckCircle2, 
-  Database
+  Database,
+  ExternalLink,
+  GitBranch
 } from 'lucide-react';
+import { GithubIcon } from './Icons';
 import { Project } from '../types';
 import { downloadFile, copyToClipboard, formatCurrency } from '../utils/helpers';
 import { 
@@ -85,7 +88,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                 {project.category}
               </span>
               <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-sky-100/60 text-sky-900 border border-sky-200 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3 text-sky-600" />
+                {project.isRealRepo ? <GitBranch className="w-3 h-3 text-emerald-600" /> : <AlertCircle className="w-3 h-3 text-sky-600" />}
                 {project.demoDataLabel}
               </span>
             </div>
@@ -97,13 +100,29 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             </p>
           </div>
 
-          <button
-            onClick={onClose}
-            className="p-2.5 rounded-2xl text-slate-400 hover:text-slate-700 hover:bg-white transition-colors shrink-0 border border-transparent hover:border-sky-200 shadow-xs"
-            aria-label="Close modal"
-          >
-            <X className="w-6 h-6" />
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {project.githubUrl && (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white transition-colors shadow-sm"
+                title="Open GitHub Repository"
+              >
+                <GithubIcon className="w-4 h-4 text-white" />
+                <span>GitHub Repo</span>
+                <ExternalLink className="w-3 h-3 text-slate-300" />
+              </a>
+            )}
+
+            <button
+              onClick={onClose}
+              className="p-2.5 rounded-2xl text-slate-400 hover:text-slate-700 hover:bg-white transition-colors shrink-0 border border-transparent hover:border-sky-200 shadow-xs"
+              aria-label="Close modal"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
         </div>
 
         {/* Navigation Tabs Bar */}
@@ -171,6 +190,44 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
           {activeTab === 'overview' && (
             <div className="space-y-8">
               
+              {/* GitHub Repository Live Verified Banner */}
+              {project.repoStats && (
+                <div className="p-4 sm:p-5 rounded-2xl bg-white border border-sky-200/90 shadow-xs flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-2xl bg-slate-900 text-white shadow-xs">
+                      <GithubIcon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs sm:text-sm font-bold text-navy-950 font-mono">
+                          {project.repoStats.repoName}
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          <GitBranch className="w-3 h-3 text-emerald-600" />
+                          <span>Real GitHub Project</span>
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-500 mt-0.5 font-normal">
+                        Language: <span className="font-semibold text-slate-700">{project.repoStats.language}</span> • {project.repoStats.status}
+                      </p>
+                    </div>
+                  </div>
+
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 transition-colors shadow-2xs"
+                    >
+                      <GithubIcon className="w-3.5 h-3.5" />
+                      <span>Explore Repository Files</span>
+                      <ExternalLink className="w-3 h-3 text-sky-500" />
+                    </a>
+                  )}
+                </div>
+              )}
+
               {/* Metrics Ribbon */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
                 {project.metrics.map((metric, i) => (
@@ -242,7 +299,52 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
 
                 <div className="h-72 w-full pt-2">
                   <ResponsiveContainer width="100%" height="100%">
-                    {project.chartType === 'bar' && project.id === 'sales-performance-analysis' ? (
+                    {project.id === 'trendpulse-sentiment-intelligence' ? (
+                      <BarChart data={project.chartData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#F0F9FF" />
+                        <XAxis dataKey="category" tick={{ fontSize: 10, fill: '#64748B' }} />
+                        <YAxis tick={{ fontSize: 11, fill: '#64748B' }} />
+                        <Tooltip 
+                          contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#BAE6FD', borderRadius: '12px' }}
+                          formatter={(val: any, name: any) => [
+                            name === 'articles' ? `${val} Articles` : `${val}%`, 
+                            name === 'articles' ? 'ARTICLE COUNT' : name === 'trendScore' ? 'TREND SCORE %' : 'NEGATIVE SENTIMENT %'
+                          ]} 
+                        />
+                        <Legend />
+                        <Bar dataKey="articles" name="Article Count" fill="#0EA5E9" radius={[6, 6, 0, 0]} />
+                        <Bar dataKey="trendScore" name="Trend Score %" fill="#38BDF8" radius={[6, 6, 0, 0]} />
+                        <Bar dataKey="negativePct" name="Negative Sentiment %" fill="#94A3B8" radius={[6, 6, 0, 0]} />
+                      </BarChart>
+                    ) : project.id === 'instamart-customer-intelligence' ? (
+                      <BarChart data={project.chartData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#F0F9FF" />
+                        <XAxis dataKey="category" tick={{ fontSize: 11, fill: '#64748B' }} />
+                        <YAxis tick={{ fontSize: 11, fill: '#64748B' }} />
+                        <Tooltip 
+                          contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#BAE6FD', borderRadius: '12px' }}
+                          formatter={(val: any, name: any) => [
+                            name === 'revenue' ? `₹${Number(val).toLocaleString('en-IN')}` : `${val}%`, 
+                            name === 'revenue' ? 'COMPLETED REVENUE (INR)' : 'REVENUE SHARE %'
+                          ]} 
+                        />
+                        <Legend />
+                        <Bar dataKey="revenue" name="Completed Revenue (₹)" fill="#0EA5E9" radius={[6, 6, 0, 0]} />
+                        <Bar dataKey="marginPct" name="Revenue Share %" fill="#38BDF8" radius={[6, 6, 0, 0]} />
+                      </BarChart>
+                    ) : project.id === 'kmeans-from-scratch' ? (
+                      <ComposedChart data={project.chartData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#F0F9FF" />
+                        <XAxis dataKey="k" tick={{ fontSize: 11, fill: '#64748B' }} />
+                        <YAxis yAxisId="left" tick={{ fontSize: 11, fill: '#64748B' }} />
+                        <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11, fill: '#64748B' }} domain={[0, 1]} />
+                        <Tooltip contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#BAE6FD', borderRadius: '12px' }} />
+                        <Legend />
+                        <Bar yAxisId="left" dataKey="customInertia" name="Custom NumPy Inertia" fill="#0EA5E9" radius={[6, 6, 0, 0]} />
+                        <Bar yAxisId="left" dataKey="sklearnInertia" name="Scikit-Learn Inertia" fill="#38BDF8" radius={[6, 6, 0, 0]} />
+                        <Line yAxisId="right" type="monotone" dataKey="silhouette" name="Silhouette Score" stroke="#0284C7" strokeWidth={2.5} />
+                      </ComposedChart>
+                    ) : project.chartType === 'bar' && project.id === 'sales-performance-analysis' ? (
                       <BarChart data={project.chartData}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#F0F9FF" />
                         <XAxis dataKey="category" tick={{ fontSize: 11, fill: '#64748B' }} />
@@ -475,15 +577,36 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
 
         {/* Modal Footer */}
         <div className="px-6 py-4 bg-sky-50/70 border-t border-sky-100 flex flex-wrap items-center justify-between gap-3">
-          <div className="text-xs text-slate-500 font-medium">
-            Portfolio Showcase Project • Synthetically Validated
+          <div className="text-xs text-slate-500 font-medium flex items-center gap-2">
+            {project.isRealRepo ? (
+              <span className="inline-flex items-center gap-1 font-semibold text-slate-700">
+                <GitBranch className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Verified GitHub Codebase & Dataset</span>
+              </span>
+            ) : (
+              <span>Portfolio Showcase Project • Validated Implementation</span>
+            )}
           </div>
-          <button
-            onClick={onClose}
-            className="px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold bg-white text-slate-700 hover:bg-sky-50 border border-sky-200 transition-colors shadow-xs"
-          >
-            Close Window
-          </button>
+          <div className="flex items-center gap-2">
+            {project.githubUrl && (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-bold bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-xs"
+              >
+                <GithubIcon className="w-4 h-4 text-white" />
+                <span>View on GitHub</span>
+                <ExternalLink className="w-3 h-3 text-slate-300" />
+              </a>
+            )}
+            <button
+              onClick={onClose}
+              className="px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold bg-white text-slate-700 hover:bg-sky-50 border border-sky-200 transition-colors shadow-xs"
+            >
+              Close Window
+            </button>
+          </div>
         </div>
 
       </div>

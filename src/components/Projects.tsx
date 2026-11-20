@@ -7,8 +7,13 @@ import {
   Database, 
   Sparkles,
   PieChart,
-  Code
+  Code,
+  GitBranch,
+  Cpu,
+  Layers,
+  ExternalLink
 } from 'lucide-react';
+import { GithubIcon } from './Icons';
 import { Project } from '../types';
 import { ProjectModal } from './ProjectModal';
 import { downloadFile } from '../utils/helpers';
@@ -20,16 +25,26 @@ export const Projects: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [activeProject, setActiveProject] = useState<Project | null>(null);
 
-  const categories = ['All', 'Sales Analytics', 'Financial Analysis', 'Customer Analytics', 'Business Intelligence', 'Data Engineering & EDA'];
+  const categories = [
+    'All', 
+    'AI & NLP Analytics', 
+    'Customer Analytics', 
+    'Machine Learning & Algorithms', 
+    'Sales Analytics', 
+    'Financial Analysis', 
+    'Business Intelligence'
+  ];
 
   const filteredProjects = selectedCategory === 'All' 
     ? projects 
     : projects.filter(p => p.category === selectedCategory);
 
   const categoryIcons: Record<string, React.ReactNode> = {
+    'AI & NLP Analytics': <Cpu className="w-4 h-4 text-sky-500" />,
+    'Customer Analytics': <PieChart className="w-4 h-4 text-sky-500" />,
+    'Machine Learning & Algorithms': <Layers className="w-4 h-4 text-sky-600" />,
     'Sales Analytics': <TrendingUp className="w-4 h-4 text-sky-500" />,
     'Financial Analysis': <Database className="w-4 h-4 text-sky-600" />,
-    'Customer Analytics': <PieChart className="w-4 h-4 text-sky-500" />,
     'Business Intelligence': <BarChart3 className="w-4 h-4 text-sky-500" />,
     'Data Engineering & EDA': <Code className="w-4 h-4 text-sky-600" />
   };
@@ -91,11 +106,19 @@ export const Projects: React.FC = () => {
                   
                   <div>
                     {/* Category & Project Index Header */}
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full bg-sky-50 text-sky-800 border border-sky-200">
-                        {icon}
-                        <span>{project.category}</span>
-                      </span>
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full bg-sky-50 text-sky-800 border border-sky-200">
+                          {icon}
+                          <span>{project.category}</span>
+                        </span>
+                        {project.isRealRepo && (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200" title="Verified GitHub Repository & Real Dataset">
+                            <GitBranch className="w-3 h-3 text-emerald-600" />
+                            <span>GitHub Real Data</span>
+                          </span>
+                        )}
+                      </div>
                       <span className="text-[11px] font-bold font-mono text-sky-400">
                         CASE 0{index + 1}
                       </span>
@@ -144,7 +167,7 @@ export const Projects: React.FC = () => {
                 </div>
 
                 {/* Card Bottom Actions */}
-                <div className="p-4 bg-sky-50/40 border-t border-sky-100 flex items-center justify-between gap-3">
+                <div className="p-4 bg-sky-50/40 border-t border-sky-100 flex items-center justify-between gap-2">
                   <button
                     onClick={() => {
                       setActiveProject(project);
@@ -152,18 +175,34 @@ export const Projects: React.FC = () => {
                     }}
                     className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-sky-600 hover:text-sky-700 transition-colors group-hover:translate-x-1 duration-200"
                   >
-                    <span>Explore Full Case Study</span>
+                    <span>Explore Case Study</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
 
-                  <button
-                    onClick={() => downloadFile(project.downloadableFiles.datasetFilename, project.downloadableFiles.datasetContent, 'text/csv')}
-                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-bold text-sky-700 hover:text-sky-800 bg-white hover:bg-sky-50 border border-sky-200 shadow-xs transition-colors"
-                    title={`Download Synthetic CSV (${project.downloadableFiles.datasetFilename})`}
-                  >
-                    <Download className="w-3.5 h-3.5 text-sky-500" />
-                    <span>CSV</span>
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-bold text-slate-700 hover:text-sky-700 bg-white hover:bg-sky-50 border border-sky-200 shadow-xs transition-colors"
+                        title="View Repository on GitHub"
+                      >
+                        <GithubIcon className="w-3.5 h-3.5 text-slate-800" />
+                        <span>Repo</span>
+                      </a>
+                    )}
+
+                    <button
+                      onClick={() => downloadFile(project.downloadableFiles.datasetFilename, project.downloadableFiles.datasetContent, 'text/csv')}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-bold text-sky-700 hover:text-sky-800 bg-white hover:bg-sky-50 border border-sky-200 shadow-xs transition-colors"
+                      title={`Download Dataset (${project.downloadableFiles.datasetFilename})`}
+                    >
+                      <Download className="w-3.5 h-3.5 text-sky-500" />
+                      <span>Data</span>
+                    </button>
+                  </div>
                 </div>
 
               </div>

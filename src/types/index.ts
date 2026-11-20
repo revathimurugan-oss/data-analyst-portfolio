@@ -2,7 +2,7 @@ export interface Project {
   id: string;
   title: string;
   tagline: string;
-  category: 'Sales Analytics' | 'Financial Analysis' | 'Customer Analytics' | 'Business Intelligence' | 'Data Engineering & EDA';
+  category: string;
   tools: string[];
   businessProblem: string;
   datasetDescription: string;
@@ -27,6 +27,15 @@ export interface Project {
   }[];
   chartType: 'bar' | 'line' | 'pie' | 'composed' | 'comparison';
   chartData: any[];
+  githubUrl?: string;
+  isRealRepo?: boolean;
+  repoStats?: {
+    repoName: string;
+    language: string;
+    stars?: number;
+    forks?: number;
+    status?: string;
+  };
 }
 
 export interface SkillCategory {
