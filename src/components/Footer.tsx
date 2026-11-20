@@ -2,7 +2,8 @@ import React from 'react';
 import { 
   ArrowUp, 
   FileText,
-  ShieldCheck
+  ShieldCheck,
+  Award
 } from 'lucide-react';
 import { LinkedinIcon, GithubIcon } from './Icons';
 import { usePortfolio } from '../context/PortfolioContext';
@@ -117,7 +118,16 @@ export const Footer: React.FC<FooterProps> = ({ onOpenResumeModal, onOpenAdminMo
                 download="Revathi_Murugan_Resume.pdf"
                 className="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold shadow-sm shadow-sky-400/30 transition-colors"
               >
-                <span>Direct Download PDF</span>
+                <span>Direct Download Resume</span>
+              </a>
+
+              <a
+                href="/TN_Skill_Certificate_Revathi_Murugan.pdf"
+                download="TN_Skill_Certificate_Revathi_Murugan.pdf"
+                className="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-2xl bg-white hover:bg-sky-50 text-slate-700 text-xs font-bold transition-colors border border-sky-200 shadow-xs"
+              >
+                <Award className="w-3.5 h-3.5 text-sky-600" />
+                <span>TN Skill Certificate (PDF)</span>
               </a>
             </div>
           </div>

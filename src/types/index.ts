@@ -59,6 +59,11 @@ export interface CertificationItem {
   date: string;
   status: 'Completed' | 'Issued';
   skillsCovered: string[];
+  certificatePdfUrl?: string;
+  certificateImageUrl?: string;
+  certificateNo?: string;
+  enrolmentNo?: string;
+  recognitionCode?: string;
 }
 
 export interface ExperienceItem {
