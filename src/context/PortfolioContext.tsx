@@ -163,33 +163,77 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     return DEFAULT_VISIBILITY;
   });
 
-  // Sync to LocalStorage on changes
+  // Helper to synchronize changes to Cloud Backend
+  const syncToCloud = (data: Record<string, any>) => {
+    try {
+      fetch('/api/portfolio/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).catch(() => {
+        fetch('/api/portfolio', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ payload: data })
+        }).catch(() => {});
+      });
+    } catch {
+      // Ignore background sync errors
+    }
+  };
+
+  // Two-way synchronization: Pull latest data from Cloud Backend on mount
+  useEffect(() => {
+    fetch('/api/portfolio')
+      .then(res => res.json())
+      .then(result => {
+        if (result?.data) {
+          if (result.data.personalInfo) setPersonalInfo(result.data.personalInfo);
+          if (result.data.projects) setProjects(result.data.projects);
+          if (result.data.skillCategories) setSkillCategories(result.data.skillCategories);
+          if (result.data.educationList) setEducationList(result.data.educationList);
+          if (result.data.certificationsList) setCertificationsList(result.data.certificationsList);
+          if (result.data.experienceList) setExperienceList(result.data.experienceList);
+          if (result.data.sectionVisibility) setSectionVisibility(result.data.sectionVisibility);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Sync to LocalStorage & Cloud Backend on changes
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.PERSONAL_INFO, JSON.stringify(personalInfo));
+    syncToCloud({ personalInfo });
   }, [personalInfo]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.PROJECTS, JSON.stringify(projects));
+    syncToCloud({ projects });
   }, [projects]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.SKILLS, JSON.stringify(skillCategories));
+    syncToCloud({ skillCategories });
   }, [skillCategories]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.EDUCATION, JSON.stringify(educationList));
+    syncToCloud({ educationList });
   }, [educationList]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.CERTIFICATIONS, JSON.stringify(certificationsList));
+    syncToCloud({ certificationsList });
   }, [certificationsList]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.EXPERIENCE, JSON.stringify(experienceList));
+    syncToCloud({ experienceList });
   }, [experienceList]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.VISIBILITY, JSON.stringify(sectionVisibility));
+    syncToCloud({ sectionVisibility });
   }, [sectionVisibility]);
 
   // --- PERSONAL INFO CRUD ---
@@ -390,6 +434,16 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setCertificationsList(defaultCertificationsList);
     setExperienceList(defaultExperienceList);
     setSectionVisibility(DEFAULT_VISIBILITY);
+
+    try {
+      fetch('/api/portfolio/reset', { method: 'POST' }).catch(() => {
+        fetch('/api/portfolio', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'reset' })
+        }).catch(() => {});
+      });
+    } catch {}
 
     addAuditLog('Reset Portfolio Data', 'Restored all authentic resume and project defaults', 'warning');
   };
