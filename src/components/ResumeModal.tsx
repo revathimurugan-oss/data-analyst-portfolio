@@ -5,7 +5,7 @@ import {
   FileText, 
   CheckCircle2
 } from 'lucide-react';
-import { personalInfo } from '../data/portfolioData';
+import { usePortfolio } from '../context/PortfolioContext';
 import { trackEvent } from '../utils/adminService';
 
 interface ResumeModalProps {
@@ -14,6 +14,7 @@ interface ResumeModalProps {
 }
 
 export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
+  const { personalInfo } = usePortfolio();
   if (!isOpen) return null;
 
   return (

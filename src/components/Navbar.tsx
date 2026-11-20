@@ -141,6 +141,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal, onOpenAdminMo
 
           {/* Mobile Menu Button */}
           <div className="flex sm:hidden items-center gap-2">
+            {onOpenAdminModal && (
+              <button
+                onClick={onOpenAdminModal}
+                className="p-2 rounded-xl bg-white text-sky-600 border border-sky-200 shadow-2xs"
+                title="Admin Studio"
+                aria-label="Admin Studio"
+              >
+                <ShieldCheck className="w-4 h-4" />
+              </button>
+            )}
             <a
               href="/Revathi_Murugan_Resume.pdf"
               download="Revathi_Murugan_Resume.pdf"
